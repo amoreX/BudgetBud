@@ -1,27 +1,43 @@
 "use client"
 
-import { Cell, Pie, PieChart } from "recharts"
+import { Cell, Pie, PieChart, TooltipProps } from "recharts"
 import { PieChartIcon } from "lucide-react"
-
+import { JSX } from "react"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Button } from "@/components/ui/button"
 import { categories, getCategoryColor, transactions } from "@/lib/data"
 
-export default function CategoryPieChart() {
+interface Transaction {
+  date: string;
+  amount: number;
+  category: string;
+}
+
+interface Category {
+  name: string;
+}
+
+interface CategoryData {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export default function CategoryPieChart():JSX.Element {
   // Get current month data
   const today = new Date()
   const currentMonth = today.getMonth()
   const currentYear = today.getFullYear()
 
   // Make sure transactions and categories are defined before using them
-  const safeTransactions = transactions || []
-  const safeCategories = categories || []
+  const safeTransactions: Transaction[] = transactions || []
+  const safeCategories: Category[] = categories || []
 
   // Check if we have any transaction data
   const hasData = safeTransactions.length > 0 && safeCategories.length > 0
 
   // Process data if available
-  let categoryData = []
+  let categoryData: CategoryData[] = []
 
   if (hasData) {
     const thisMonthTransactions = safeTransactions.filter((t) => {
@@ -61,7 +77,7 @@ export default function CategoryPieChart() {
   }
 
   return (
-    <ChartContainer className="h-[300px]">
+    <ChartContainer className="h-[300px]" config={{}} >
       <PieChart>
         <Pie
           data={categoryData}
@@ -72,14 +88,14 @@ export default function CategoryPieChart() {
           outerRadius={80}
           innerRadius={40}
           paddingAngle={2}
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+          label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
           labelLine={false}
         >
           {categoryData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        <ChartTooltip content={<ChartTooltipContent formatValue={(value) => `$${value.toFixed(2)}`} />} />
+        <ChartTooltip content={<ChartTooltipContent  />} />
       </PieChart>
     </ChartContainer>
   )

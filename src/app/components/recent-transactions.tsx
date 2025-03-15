@@ -6,9 +6,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { getCategoryColor, transactions } from "@/lib/data"
 
+// Define the type for a transaction
+interface Transaction {
+  id: string;
+  description: string;
+  date: string;
+  amount: number;
+  category: string;
+}
+
 export default function RecentTransactions() {
   // Make sure transactions is defined before using it
-  const safeTransactions = transactions || []
+  const safeTransactions: Transaction[] = transactions || []
 
   // Check if we have any transaction data
   const hasData = safeTransactions.length > 0

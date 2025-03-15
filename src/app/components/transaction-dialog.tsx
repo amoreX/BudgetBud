@@ -18,7 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { categories, transactions } from "@/lib/data"
-import { useForm } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 
 interface TransactionDialogProps {
   transactionId?: number
@@ -26,23 +26,23 @@ interface TransactionDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
+interface TransactionFormValues {
+  description: string
+  amount: string
+  isExpense: boolean
+  date: Date
+  category: string
+}
+
 export function TransactionDialog({ transactionId, open, onOpenChange }: TransactionDialogProps) {
   // Make sure transactions and categories are defined before using them
   const safeTransactions = transactions || []
   const safeCategories = categories || []
 
-  const isNew = transactionId === undefined
-  const transaction = isNew
-    ? { id: 0, description: "", amount: 0, date: new Date().toISOString(), category: "Food" }
-    : safeTransactions.find((t) => t.id === transactionId) || {
-        id: 0,
-        description: "",
-        amount: 0,
-        date: new Date().toISOString(),
-        category: "Food",
-      }
+  const isNew = transactionId 
+  const transaction = { id: 0, description: "", amount: 0, date: new Date().toISOString(), category: "Food" };
 
-  const form = useForm({
+  const form = useForm<TransactionFormValues>({
     defaultValues: {
       description: transaction.description,
       amount: Math.abs(transaction.amount).toString(),
@@ -52,7 +52,7 @@ export function TransactionDialog({ transactionId, open, onOpenChange }: Transac
     },
   })
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<TransactionFormValues> = (data) => {
     const finalAmount = data.isExpense
       ? -Math.abs(Number.parseFloat(data.amount))
       : Math.abs(Number.parseFloat(data.amount))
@@ -171,9 +171,9 @@ export function TransactionDialog({ transactionId, open, onOpenChange }: Transac
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {safeCategories.map((category) => (
-                          <SelectItem key={category.id} value={category.name}>
-                            {category.name}
+                        {safeCategories.map((category,ind) => (
+                          <SelectItem key={ind} value={"test value"}>
+                            category.name
                           </SelectItem>
                         ))}
                       </SelectContent>

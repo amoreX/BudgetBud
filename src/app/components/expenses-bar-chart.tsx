@@ -7,14 +7,24 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Button } from "@/components/ui/button"
 import { transactions } from "@/lib/data"
 
+interface Transaction {
+  date: string;
+  amount: number;
+}
+
+interface MonthlyData {
+  name: string;
+  expenses: number;
+}
+
 export default function ExpensesBarChart() {
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
   const today = new Date()
-  const monthlyData = []
+  const monthlyData: MonthlyData[] = []
 
   // Make sure transactions is defined before using it
-  const safeTransactions = transactions || []
+  const safeTransactions: Transaction[] = transactions || []
 
   // Check if we have any transaction data
   const hasData = safeTransactions.length > 0
@@ -81,7 +91,7 @@ export default function ExpensesBarChart() {
         <CartesianGrid vertical={false} strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis tickFormatter={(value) => `$${value}`} width={60} />
-        <ChartTooltip content={<ChartTooltipContent formatValue={(value) => `$${value.toFixed(2)}`} />} />
+        <ChartTooltip content={<ChartTooltipContent />} />
         <Bar dataKey="expenses" fill="var(--color-expenses)" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ChartContainer>

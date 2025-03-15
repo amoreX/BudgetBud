@@ -6,9 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { transactions } from "@/lib/data"
 import { budgets } from "@/lib/data" // Import budgets
 
+interface Transaction {
+  date: string;
+  amount: number;
+}
+
 export default function SummaryCards() {
   // Make sure transactions is defined before using it
-  const safeTransactions = transactions || []
+  const safeTransactions: Transaction[] = transactions || []
 
   // Calculate summary data
   const currentMonth = new Date().getMonth()
