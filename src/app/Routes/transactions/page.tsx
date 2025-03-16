@@ -66,7 +66,7 @@ export default function TransactionsPage() {
   };
 
   return (
-    <div className="flex max-h-screen flex-col">
+    <div className="flex max-h-screen flex-col px-4">
       <main className="flex justify-center">
         <div className="container py-6">
           <Card>
@@ -74,12 +74,12 @@ export default function TransactionsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>Transactions</CardTitle>
-                  <CardDescription>Manage your financial transactions</CardDescription>
+                  <CardDescription className="sm:block">Manage your financial transactions</CardDescription>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-end sm:flex-row  gap-2">
                   <Input
                     placeholder="Search transactions..."
-                    className="w-[250px]"
+                    className="w-[200px]"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />

@@ -57,7 +57,7 @@ export default function AddTransactionPage() {
   },[expenses]);
 
   return (
-    <div className="flex max-h-screen flex-col  ">
+    <div className="flex max-h-screen flex-col px-4  ">
 
       <main className="flex items-center justify-center   ">
         <div className="container max-w-md py-6">

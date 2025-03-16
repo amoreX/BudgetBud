@@ -21,7 +21,7 @@ import { useExpensesContext } from "./context/DataContext"
 export default function Dashboard() {
 
   return (
-    <div className="flex max-h-screen flex-col ">    
+    <div className="flex max-h-screen flex-col px-4">    
       <main className="flex-1 flex justify-center">
         <div className="container py-6 ">
           <Suspense fallback={<SummarySkeleton />}>
