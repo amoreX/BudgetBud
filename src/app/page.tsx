@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Plus } from "lucide-react"
 
@@ -19,6 +19,7 @@ import TransactionsSkeleton from "./components/transactions-skeleton"
 import { useExpensesContext } from "./context/DataContext"
 
 export default function Dashboard() {
+  const [view, setView] = useState<string>("6months") // Toggle state
 
   return (
     <div className="flex max-h-screen flex-col px-4">    
@@ -29,14 +30,19 @@ export default function Dashboard() {
           </Suspense>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle>Monthly Expenses</CardTitle>
-                <CardDescription>Your spending over the last 6 months</CardDescription>
+            <Card className="lg:col-span-2 overflow-hidden">
+              <CardHeader className="flex justify-between items-center">
+                <div>
+                  <CardTitle>Monthly Expenses</CardTitle>
+                  <CardDescription>Your spending {view==="6months"? "yearly.":"this month."}</CardDescription>
+                </div>
+                <Button className=" bg-white text-black border-2 transition-all duration-300 ease-in-out hover:bg-black hover:text-white" onClick={() => setView(view === "6months" ? "currentMonth" : "6months")} >
+                  {view === "6months" ? "Current Month" : "Yearly"}
+                </Button>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<div className="h-[300px] w-full rounded-md bg-muted" />}>
-                  <ExpensesBarChart />
+                  <ExpensesBarChart view={view} />
                 </Suspense>
               </CardContent>
             </Card>
