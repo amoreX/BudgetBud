@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { categories, transactions } from "@/lib/data"
 
 const categoryColors: { [key: string]: string } = {
-  groccery: "#FF6384",
+  grocery: "#FF6384",
   shopping: "#36A2EB",
   bills: "#FFCE56",
   income: "#4BC0C0",
@@ -36,7 +36,7 @@ export default function CategoryPieChart(): JSX.Element {
 
   const hasData = expenses.length > 0
 
-  const categories:string[]=["groccery","shopping","bills","Income","travel"];
+  const categories:string[]=["grocery","shopping","bills","income","travel"];
   
   let categoryData: catData[] = []
 

@@ -173,7 +173,7 @@ export default function AddTransactionPage() {
                               <SelectItem value="shopping">Shopping</SelectItem>
                               <SelectItem value="travel">Travel</SelectItem>
                               <SelectItem value="bills">Bills</SelectItem>
-                              <SelectItem value="Income">Income</SelectItem>
+                              <SelectItem value="income">Income</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
