@@ -169,7 +169,7 @@ export default function AddTransactionPage() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="groccery">Groccery</SelectItem>
+                              <SelectItem value="grocery">Grocery</SelectItem>
                               <SelectItem value="shopping">Shopping</SelectItem>
                               <SelectItem value="travel">Travel</SelectItem>
                               <SelectItem value="bills">Bills</SelectItem>

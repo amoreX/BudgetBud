@@ -179,11 +179,12 @@ export function TransactionDialog({ transactionId, open, onOpenChange }:any ) {
                   </div>
 
                   <DialogFooter className="flex justify-end px-0 pt-4">
-                    <Button type="submit" disabled={!form.watch("description") || !form.watch("amount")}>
-                      Edit
-                    </Button>
+                    
                     <Button className="bg-red-700 transicition-all duration-300 ease-in-out hover:bg-red-500"onClick={()=>deleteTransaction()} disabled={!form.watch("description") || !form.watch("amount")}>
                       Delete
+                    </Button>
+                    <Button type="submit" disabled={!form.watch("description") || !form.watch("amount")}>
+                      Edit
                     </Button>
                   </DialogFooter>
                 </form>
