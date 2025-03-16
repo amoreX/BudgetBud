@@ -56,30 +56,9 @@ const safeCategories: categories[]=[];
   // If no data, show empty state
   if (!hasData) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <header className="sticky top-0 z-10 border-b bg-background">
-          <div className="container flex h-16 items-center justify-between py-4">
-            <h1 className="text-xl font-semibold">Personal Finance Visualizer</h1>
-            <nav className="flex items-center gap-4">
-              <Link href="/">
-                <Button variant="ghost">Dashboard</Button>
-              </Link>
-              <Link href="/transactions">
-                <Button variant="ghost">Transactions</Button>
-              </Link>
-              <Link href="/categories">
-                <Button variant="ghost">Categories</Button>
-              </Link>
-              <Link href="/transactions/new">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Transaction
-                </Button>
-              </Link>
-            </nav>
-          </div>
-        </header>
-        <main className="flex-1">
+      <div className="flex max-h-screen flex-col">
+        
+        <main className="flex justify-center">
           <div className="container py-6">
             <Card>
               <CardContent className="flex flex-col items-center justify-center p-12 text-center">
@@ -94,10 +73,10 @@ const safeCategories: categories[]=[];
                   </p>
                   <div className="flex gap-4">
                     <Button asChild variant="outline">
-                      <a href="/transactions/new">Add transactions</a>
+                      <a href="/Routes/Transactions/new">Add transactions</a>
                     </Button>
                     <Button asChild>
-                      <a href="/budgets/create">Create budget</a>
+                      <a href="/Routes/Budget/create">Create budget</a>
                     </Button>
                   </div>
                 </div>

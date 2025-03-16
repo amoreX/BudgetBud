@@ -22,7 +22,7 @@ export default function Dashboard() {
   const {expenses,addExpense,getTotalExpenses}=useExpensesContext();
 
   return (
-    <div className="flex min-h-screen flex-col ">    
+    <div className="flex max-h-screen flex-col ">    
       <main className="flex-1 flex justify-center">
         <div className="container py-6 ">
           <Suspense fallback={<SummarySkeleton />}>
@@ -66,7 +66,7 @@ export default function Dashboard() {
                 </Suspense>
               </CardContent>
               <CardFooter>
-                <Link href="/budgets">
+                <Link href="/Routes/Budget">
                   <Button variant="outline" className="w-full">
                     Manage Budgets
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -76,18 +76,18 @@ export default function Dashboard() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <div>
+                <div >
                   <CardTitle>Recent Transactions</CardTitle>
                   <CardDescription>Your latest financial activity</CardDescription>
                 </div>
-                <Link href="/transactions">
+                <Link href="/Routes/Transactions">
                   <Button variant="ghost" size="sm">
                     View All
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </CardHeader>
-              <CardContent>
+              <CardContent className="h-100  flex-col justify-center  ">
                 <Suspense fallback={<TransactionsSkeleton />}>
                   <RecentTransactions />
                 </Suspense>

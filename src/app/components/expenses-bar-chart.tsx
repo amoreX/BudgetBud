@@ -70,7 +70,7 @@ export default function ExpensesBarChart() {
             Add transactions to see your monthly expenses chart.
           </p>
           <Button asChild>
-            <a href="/transactions/new">Add your first transaction</a>
+            <a href="/Routes/Transactions/new">Add your first transaction</a>
           </Button>
         </div>
       </div>

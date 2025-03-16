@@ -25,7 +25,7 @@ export default function RecentTransactions() {
   // If no data, show empty state
   if (!hasData) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-md border border-dashed p-8 text-center">
+      <div className="flex flex-col h-100 items-center  justify-center rounded-md border border-dashed p-8 text-center">
         <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
           <Receipt className="h-10 w-10 text-muted-foreground" />
           <h3 className="mt-4 text-lg font-semibold">No transactions yet</h3>
@@ -33,7 +33,7 @@ export default function RecentTransactions() {
             Add your first transaction to start tracking your finances.
           </p>
           <Button asChild>
-            <a href="/transactions/new">Add transaction</a>
+            <a href="/Routes/Transactions/new">Add transaction</a>
           </Button>
         </div>
       </div>

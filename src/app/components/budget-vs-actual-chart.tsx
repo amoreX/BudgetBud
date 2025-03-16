@@ -69,7 +69,7 @@ export default function CategoryPieChart() {
           <h3 className="mt-4 text-lg font-semibold">No category data</h3>
           <p className="mb-4 mt-2 text-sm text-muted-foreground">Add transactions to see your spending by category.</p>
           <Button asChild>
-            <a href="/transactions/new">Add your first transaction</a>
+            <a href="/Routes/Transactions/new">Add your first transaction</a>
           </Button>
         </div>
       </div>

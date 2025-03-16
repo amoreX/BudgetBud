@@ -78,28 +78,9 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <h1 className="text-xl font-semibold">Personal Finance Visualizer</h1>
-          <nav className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost">Dashboard</Button>
-            </Link>
-            <Link href="/transactions">
-              <Button variant="ghost">Transactions</Button>
-            </Link>
-            <Link href="/budgets">
-              <Button variant="ghost">Budgets</Button>
-            </Link>
-            <Button onClick={handleAddCategory}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Category
-            </Button>
-          </nav>
-        </div>
-      </header>
-      <main className="flex-1">
+    <div className="flex max-h-screen flex-col">
+      
+      <main className="flex justify-center">
         <div className="container py-6">
           <Card>
             <CardHeader>

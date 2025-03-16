@@ -48,24 +48,9 @@ const safeCategories: categories[]=[];
 
   if (!hasCategories) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <header className="sticky top-0 z-10 border-b bg-background">
-          <div className="container flex h-16 items-center justify-between py-4">
-            <h1 className="text-xl font-semibold">Personal Finance Visualizer</h1>
-            <nav className="flex items-center gap-4">
-              <Link href="/">
-                <Button variant="ghost">Dashboard</Button>
-              </Link>
-              <Link href="/transactions">
-                <Button variant="ghost">Transactions</Button>
-              </Link>
-              <Link href="/budgets">
-                <Button variant="ghost">Budgets</Button>
-              </Link>
-            </nav>
-          </div>
-        </header>
-        <main className="flex-1">
+      <div className="flex max-h-screen flex-col">
+        
+        <main className="flex justify-center ">
           <div className="container max-w-md py-6">
             <Card>
               <CardHeader>
@@ -78,7 +63,7 @@ const safeCategories: categories[]=[];
                     You need to create categories before you can set up budgets.
                   </p>
                   <Button asChild>
-                    <Link href="/categories">Create Categories</Link>
+                    <Link href="/Routes/Categories">Create Categories</Link>
                   </Button>
                 </div>
               </CardContent>
