@@ -1,28 +1,18 @@
 "use client"
 
 import { ArrowDown, ArrowUp, Receipt } from "lucide-react"
-
+import { useExpensesContext } from "../context/DataContext"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { getCategoryColor, transactions } from "@/lib/data"
 
-// Define the type for a transaction
-interface Transaction {
-  id: string;
-  description: string;
-  date: string;
-  amount: number;
-  category: string;
-}
 
 export default function RecentTransactions() {
-  // Make sure transactions is defined before using it
-  const safeTransactions: Transaction[] = transactions || []
+  
+  const {expenses}=useExpensesContext();
+  const hasData=expenses.length>0;
 
-  // Check if we have any transaction data
-  const hasData = safeTransactions.length > 0
 
-  // If no data, show empty state
   if (!hasData) {
     return (
       <div className="flex flex-col h-100 items-center  justify-center rounded-md border border-dashed p-8 text-center">
@@ -41,7 +31,7 @@ export default function RecentTransactions() {
   }
 
   // Sort transactions by date (newest first)
-  const sortedTransactions = [...safeTransactions]
+  const sortedTransactions = [...expenses]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5) // Get only the 5 most recent
 
@@ -51,7 +41,7 @@ export default function RecentTransactions() {
         <div key={transaction.id} className="flex items-center">
           <Avatar className="h-9 w-9">
             <AvatarFallback style={{ backgroundColor: getCategoryColor(transaction.category) }} className="text-white">
-              {transaction.category.substring(0, 2)}
+              {transaction.isExpense?"Ex":"In"}
             </AvatarFallback>
           </Avatar>
           <div className="ml-4 space-y-1">
@@ -59,13 +49,13 @@ export default function RecentTransactions() {
             <p className="text-sm text-muted-foreground">{new Date(transaction.date).toLocaleDateString()}</p>
           </div>
           <div className="ml-auto font-medium">
-            {transaction.amount < 0 ? (
+            {transaction.isExpense? (
               <div className="flex items-center text-red-500">
-                <ArrowDown className="mr-1 h-4 w-4" />${Math.abs(transaction.amount).toFixed(2)}
+                <ArrowDown className="mr-1 h-4 w-4" />${transaction.amount}
               </div>
             ) : (
               <div className="flex items-center text-green-500">
-                <ArrowUp className="mr-1 h-4 w-4" />${transaction.amount.toFixed(2)}
+                <ArrowUp className="mr-1 h-4 w-4" />${transaction.amount}
               </div>
             )}
           </div>

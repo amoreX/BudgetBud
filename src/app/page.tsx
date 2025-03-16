@@ -19,7 +19,6 @@ import TransactionsSkeleton from "./components/transactions-skeleton"
 import { useExpensesContext } from "./context/DataContext"
 
 export default function Dashboard() {
-  const {expenses,addExpense,getTotalExpenses}=useExpensesContext();
 
   return (
     <div className="flex max-h-screen flex-col ">    

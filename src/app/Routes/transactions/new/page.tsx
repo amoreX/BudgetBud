@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -19,6 +19,7 @@ import { toast } from "sonner" // Import toast
 export default function AddTransactionPage() {
   
   const {expenses,addExpense} =useExpensesContext();
+  const [formKey, setFormKey] = useState(0);
 
   const form = useForm({
     defaultValues: {
@@ -31,9 +32,24 @@ export default function AddTransactionPage() {
   })
 
   const onSubmit = (data: any) => {
+    if (!data.category) {
+      data.category = form.getValues("category");
+    }
     addExpense(data);
-    toast("Your transaction has been successfully added." );
-    form.reset(); 
+    toast("Your transaction has been successfully added.", {
+      style: {
+        backgroundColor: 'black',
+        color: 'white'
+      }
+    });
+    form.reset({
+      description: "",
+      amount: "",
+      isExpense: true,
+      date: new Date(),
+      category: ""
+    });
+    setFormKey(prevKey => prevKey + 1); // Increment formKey to force re-render
   }
 
   useEffect(()=>{
@@ -45,7 +61,7 @@ export default function AddTransactionPage() {
 
       <main className="flex items-center justify-center   ">
         <div className="container max-w-md py-6">
-          <Card>
+          <Card key={formKey}>
             <CardHeader>
               <CardTitle>Add Transaction</CardTitle>
               <CardDescription>Record a new income or expense</CardDescription>
@@ -145,11 +161,11 @@ export default function AddTransactionPage() {
                           <FormLabel>Category</FormLabel>
                           <Select
                             onValueChange={(value) => field.onChange(value)}
-                            defaultValue={"groccery"}
+                            defaultValue={undefined}
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select type" />
+                                <SelectValue placeholder="Select category" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>

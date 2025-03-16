@@ -3,61 +3,67 @@
 import { Cell, Pie, PieChart, TooltipProps } from "recharts"
 import { PieChartIcon } from "lucide-react"
 import { JSX } from "react"
+import { useExpensesContext } from "../context/DataContext"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Button } from "@/components/ui/button"
-import { categories, getCategoryColor, transactions } from "@/lib/data"
+import { categories, transactions } from "@/lib/data"
 
-interface Transaction {
-  date: string;
-  amount: number;
-  category: string;
+const categoryColors: { [key: string]: string } = {
+  groccery: "#FF6384",
+  shopping: "#36A2EB",
+  bills: "#FFCE56",
+  income: "#4BC0C0",
+  travel: "#9966FF",
 }
 
-interface Category {
-  name: string;
+function getCategoryColor(category: string): string {
+  return categoryColors[category] || "#000000" // Default to black if category not found
 }
 
-interface CategoryData {
-  name: string;
-  value: number;
-  color: string;
+type catData={
+  name:string;
+  value:number;
+  color:string;
 }
 
-export default function CategoryPieChart():JSX.Element {
+export default function CategoryPieChart(): JSX.Element {
+  const { expenses, getExpensesByCategory } = useExpensesContext()
+
   // Get current month data
   const today = new Date()
   const currentMonth = today.getMonth()
   const currentYear = today.getFullYear()
 
-  // Make sure transactions and categories are defined before using them
-  const safeTransactions: Transaction[] = transactions || []
-  const safeCategories: Category[] = categories || []
+  const hasData = expenses.length > 0
 
-  // Check if we have any transaction data
-  const hasData = safeTransactions.length > 0 && safeCategories.length > 0
-
-  // Process data if available
-  let categoryData: CategoryData[] = []
+  const categories:string[]=["groccery","shopping","bills","Income","travel"];
+  
+  let categoryData: catData[] = []
 
   if (hasData) {
-    const thisMonthTransactions = safeTransactions.filter((t) => {
+    // Filter transactions for the current month and year
+    const thisMonthTransactions = expenses.filter((t) => {
       const date = new Date(t.date)
-      return date.getMonth() === currentMonth && date.getFullYear() === currentYear && t.amount < 0
+      return date.getMonth() === currentMonth && date.getFullYear() === currentYear
     })
 
+    console.log("thisMonthTransactions:",thisMonthTransactions);
+
     // Group by category
-    categoryData = safeCategories
+    categoryData = categories
       .map((category) => {
-        const categoryTransactions = thisMonthTransactions.filter((t) => t.category === category.name)
-        const total = categoryTransactions.reduce((sum, t) => sum + Math.abs(t.amount), 0)
+        const categoryTransactions = thisMonthTransactions.filter((t) => t.category == category)
+        console.log("each Category:",categoryTransactions);
+        const total = categoryTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
 
         return {
-          name: category.name,
+          name: category,
           value: total,
-          color: getCategoryColor(category.name),
+          color: getCategoryColor(category),
         }
-      })
-      .filter((category) => category.value > 0)
+      }).filter((e)=>e.value>0);
+    
+    console.log("Category Data:", categoryData)
   }
 
   // If no data or no expenses this month, show empty state
@@ -77,7 +83,7 @@ export default function CategoryPieChart():JSX.Element {
   }
 
   return (
-    <ChartContainer className="h-[300px]" config={{}} >
+    <ChartContainer className=" flex justify-center items-center" config={{}} >
       <PieChart>
         <Pie
           data={categoryData}
@@ -95,7 +101,7 @@ export default function CategoryPieChart():JSX.Element {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        <ChartTooltip content={<ChartTooltipContent  />} />
+        <ChartTooltip content={<ChartTooltipContent />} />
       </PieChart>
     </ChartContainer>
   )
