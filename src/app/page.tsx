@@ -14,7 +14,7 @@ import SummaryCards from "@/app/components/summary-cards"
 
 export default function Dashboard() {
   return (
-    <div className="flex min-h-screen flex-col ">
+    <div className="flex min-h-screen flex-col ">    
       <main className="flex-1 flex justify-center">
         <div className="container py-6 ">
           <Suspense fallback={<SummarySkeleton />}>
