@@ -1,3 +1,5 @@
+"use client"
+
 import { exec } from "child_process";
 import { execPath } from "process";
 import { createContext,useContext,useState,ReactNode } from "react";
@@ -61,7 +63,7 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 };
 
 export const useExpensesContext = () => {
-	const context = useContext(ExpensesContext);
+	const context = useContext(ExpenseContext);
 	if (!context) {
 	  throw new Error("useExpensesContext must be used within an ExpensesProvider");
 	}
