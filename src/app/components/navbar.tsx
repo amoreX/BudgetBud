@@ -16,6 +16,9 @@ const Navbar=():JSX.Element=>{
           <Link href="/Routes/transactions">
             <Button variant="ghost">Transactions</Button>
           </Link>
+          <Link href="/Routes/categories">
+            <Button variant="ghost">Categories</Button>
+          </Link>
           <Link href="/Routes/budget">
             <Button variant="ghost">Budgets</Button>
           </Link>

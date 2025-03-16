@@ -33,7 +33,7 @@ export default function RecentTransactions() {
             Add your first transaction to start tracking your finances.
           </p>
           <Button asChild>
-            <a href="/Routes/Transactions/new">Add transaction</a>
+            <a href="/Routes/transactions/new">Add transaction</a>
           </Button>
         </div>
       </div>

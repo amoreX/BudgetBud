@@ -66,7 +66,7 @@ export default function Dashboard() {
                 </Suspense>
               </CardContent>
               <CardFooter>
-                <Link href="/Routes/Budget">
+                <Link href="/Routes/budget">
                   <Button variant="outline" className="w-full">
                     Manage Budgets
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -80,7 +80,7 @@ export default function Dashboard() {
                   <CardTitle>Recent Transactions</CardTitle>
                   <CardDescription>Your latest financial activity</CardDescription>
                 </div>
-                <Link href="/Routes/Transactions">
+                <Link href="/Routes/transactions">
                   <Button variant="ghost" size="sm">
                     View All
                     <ArrowRight className="ml-2 h-4 w-4" />
