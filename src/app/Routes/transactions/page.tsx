@@ -166,6 +166,17 @@ export default function TransactionsPage() {
                             ${Math.abs(transaction.amount).toFixed(2)}
                           </span>
                         </TableCell>
+                        <TableCell className="text-right">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              setSelectedTransaction(transaction.id)
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -176,7 +187,13 @@ export default function TransactionsPage() {
         </div>
       </main>
 
-      
+      {selectedTransaction !== "" && (
+        <TransactionDialog
+          transactionId={selectedTransaction}
+          open={selectedTransaction!==""}
+          onOpenChange={() => setSelectedTransaction("")}
+        />
+      )}
     </div>
   )
 }

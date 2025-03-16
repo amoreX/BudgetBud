@@ -19,6 +19,7 @@ interface ExpenseContextProps{
 	updateExpense:(id:string,updatedExpense:Partial<Expense>) => void;
 	deleteExpense:(id:string)=>void;
 	getTotalExpenses:()=>number;
+	getExpenseById:(id:string)=>Expense[];
 	getExpensesByCategory:(category:string)=>Expense[];
 }
 
@@ -50,13 +51,16 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 		return expenses.reduce((total,expense)=>total+expense.amount,0);
 	};
 
+	const getExpenseById=(id:string)=>{
+		return expenses.filter((expense)=>expense.id===id);
+	}
 	const getExpensesByCategory = (category: string) => {
 		return expenses.filter((expense) => expense.category === category);
 	};
 
 	return (
 		<ExpenseContext.Provider
-		value={{expenses,addExpense,updateExpense,deleteExpense,getExpensesByCategory,getTotalExpenses}}
+		value={{expenses,addExpense,updateExpense,deleteExpense,getExpenseById,getExpensesByCategory,getTotalExpenses}}
 		>
 			{children}
 		</ExpenseContext.Provider>

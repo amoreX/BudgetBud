@@ -4,6 +4,9 @@ import "./globals.css";
 
 
 import Navbar from "./components/navbar";
+import { Toaster } from "@/components/ui/sonner"
+
+
 import { ExpenseProvider } from "./context/DataContext";
 
 const geistSans = Geist({
@@ -34,6 +37,7 @@ export default function RootLayout({
         <ExpenseProvider>
         <Navbar/>
         {children}
+        <Toaster/>
         </ExpenseProvider>
       </body>
     </html>

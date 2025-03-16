@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { cn } from "@/lib/utils"
 import { categories, transactions } from "@/lib/data"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner" // Import toast
 
 export default function AddTransactionPage() {
   
@@ -30,8 +31,9 @@ export default function AddTransactionPage() {
   })
 
   const onSubmit = (data: any) => {
-    // console.log(data);
     addExpense(data);
+    toast("Your transaction has been successfully added." );
+    form.reset(); 
   }
 
   useEffect(()=>{
@@ -165,7 +167,7 @@ export default function AddTransactionPage() {
                   </div>
 
                   <CardFooter className="flex justify-end px-0 pt-4">
-                    <Button type="submit" >
+                    <Button type="submit" disabled={!form.watch("description") || !form.watch("amount")}>
                       Add Transaction
                     </Button>
                   </CardFooter>
