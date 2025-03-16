@@ -3,9 +3,10 @@
 import { exec } from "child_process";
 import { execPath } from "process";
 import { createContext,useContext,useState,ReactNode } from "react";
-
+import {v4 as uuidv4} from "uuid";
 interface Expense{
 	id:string;
+	isExpense:boolean;
 	amount:number;
 	category:string;
 	date:string;
@@ -27,8 +28,9 @@ const ExpenseContext = createContext<ExpenseContextProps | undefined> (undefined
 export const ExpenseProvider =({children}:{children:ReactNode})=>{
 	const [expenses,setExpenses]=useState<Expense[]>([]);
 
-	const addExpense=(expense:Expense)=>{
-		setExpenses((prevExpense)=>[...prevExpense,expense]);
+	const addExpense=(expense:Omit<Expense,'id'>)=>{
+		const newExpense = { ...expense, id: uuidv4() };
+		setExpenses((prevExpense)=>[...prevExpense,newExpense]);
 	};
 
 	const updateExpense=(id:string,updatedExpense:Partial<Expense>)=>{

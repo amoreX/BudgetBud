@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ArrowUpDown, ChevronDown, Plus, Receipt } from "lucide-react"
-
+import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -19,40 +19,36 @@ import { TransactionDialog } from "@/app/components/transaction-dialog"
 import { transactions } from "@/lib/data"
 
 export default function TransactionsPage() {
-  const [sorting, setSorting] = useState<"date" | "amount">("date")
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc")
-  const [selectedTransaction, setSelectedTransaction] = useState<number | null>(null)
-  const [searchQuery, setSearchQuery] = useState("")
+  const [sorting, setSorting] = useState<"date" | "amount">("date");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [selectedTransaction, setSelectedTransaction] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   // Make sure transactions is defined before using it
-	type transaction={
-		id:number;
-		description:string;
-		category:string;
-		date:number;
-		amount:number;
-	}
+	
    
-  const safeTransactions: transaction[] =[];
+  const {expenses}=useExpensesContext();
 
   // Check if we have any transaction data
-  const hasData = safeTransactions.length > 0
+  const hasData = expenses.length > 0
 
-  const sortedTransactions = [...safeTransactions]
-    .filter(
-      (transaction) =>
-        transaction.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        transaction.category.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .sort((a, b) => {
-      if (sorting === "date") {
-        return sortDirection === "asc"
-          ? new Date(a.date).getTime() - new Date(b.date).getTime()
-          : new Date(b.date).getTime() - new Date(a.date).getTime()
-      } else {
-        return sortDirection === "asc" ? a.amount - b.amount : b.amount - a.amount
-      }
-    })
+  const filteredTransactions = expenses.filter(
+    (transaction) =>
+      (selectedCategories.length === 0 || selectedCategories.includes(transaction.category)) &&
+      (transaction.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        transaction.category.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const sortedTransactions = [...filteredTransactions].sort((a, b) => {
+    if (sorting === "date") {
+      return sortDirection === "asc"
+        ? new Date(a.date).getTime() - new Date(b.date).getTime()
+        : new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else {
+      return sortDirection === "asc" ? a.amount - b.amount : b.amount - a.amount
+    }
+  });
 
   const handleSort = (column: "date" | "amount") => {
     if (sorting === column) {
@@ -62,6 +58,12 @@ export default function TransactionsPage() {
       setSortDirection("desc")
     }
   }
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
+  };
 
   return (
     <div className="flex max-h-screen flex-col">
@@ -89,13 +91,27 @@ export default function TransactionsPage() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuCheckboxItem checked={true}>Show all categories</DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem checked={true}>Show all months</DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={selectedCategories.length === 0}
+                        onCheckedChange={() => setSelectedCategories([])}
+                      >
+                        Show all categories
+                      </DropdownMenuCheckboxItem>
+                      {Array.from(new Set(expenses.map((transaction) => transaction.category))).map((category) => (
+                        <DropdownMenuCheckboxItem
+                          key={category}
+                          checked={selectedCategories.includes(category)}
+                          onCheckedChange={() => handleCategoryChange(category)}
+                        >
+                          {category}
+                        </DropdownMenuCheckboxItem>
+                      ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
               </div>
             </CardHeader>
+
             <CardContent>
               {!hasData ? (
                 <div className="flex flex-col items-center justify-center rounded-md border border-dashed p-8 text-center">
@@ -146,21 +162,9 @@ export default function TransactionsPage() {
                         </TableCell>
                         <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
                         <TableCell className="text-right">
-                          <span className={transaction.amount < 0 ? "text-red-500" : "text-green-500"}>
+                          <span className={transaction.isExpense?"text-red-500" : "text-green-500"}>
                             ${Math.abs(transaction.amount).toFixed(2)}
                           </span>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              setSelectedTransaction(transaction.id)
-                            }}
-                          >
-                            Edit
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -172,13 +176,7 @@ export default function TransactionsPage() {
         </div>
       </main>
 
-      {selectedTransaction !== null && (
-        <TransactionDialog
-          transactionId={selectedTransaction}
-          open={selectedTransaction !== null}
-          onOpenChange={() => setSelectedTransaction(null)}
-        />
-      )}
+      
     </div>
   )
 }

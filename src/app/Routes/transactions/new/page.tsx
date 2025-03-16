@@ -1,9 +1,9 @@
 "use client"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-
+import { useEffect } from "react"
+import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,8 +16,8 @@ import { categories, transactions } from "@/lib/data"
 import { useForm } from "react-hook-form"
 
 export default function AddTransactionPage() {
-  const router = useRouter()
-  const safeCategories = categories || []
+  
+  const {expenses,addExpense} =useExpensesContext();
 
   const form = useForm({
     defaultValues: {
@@ -30,25 +30,13 @@ export default function AddTransactionPage() {
   })
 
   const onSubmit = (data: any) => {
-    const finalAmount = data.isExpense
-      ? -Math.abs(Number.parseFloat(data.amount))
-      : Math.abs(Number.parseFloat(data.amount))
-
-    const newTransaction = {
-      id: (transactions?.length || 0) + 1,
-      description: data.description,
-      amount: finalAmount,
-      date: data.date.toISOString(),
-      category: data.category,
-    }
-
-    console.log("New transaction:", newTransaction)
-
-    // In a real app, you would save this to your database
-    // For now, we'll just log it and redirect
-
-    router.push("/transactions")
+    // console.log(data);
+    addExpense(data);
   }
+
+  useEffect(()=>{
+    console.log(expenses);
+  },[expenses]);
 
   return (
     <div className="flex max-h-screen flex-col  ">
@@ -61,6 +49,7 @@ export default function AddTransactionPage() {
               <CardDescription>Record a new income or expense</CardDescription>
             </CardHeader>
             <CardContent>
+              
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
@@ -152,31 +141,23 @@ export default function AddTransactionPage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Category</FormLabel>
-                          {safeCategories.length > 0 ? (
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select category" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {safeCategories.map((category,ind) => (
-                                  <SelectItem key={ind} value={category}>
-                                    {category}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          ) : (
-                            <div className="flex flex-col space-y-2">
-                              <Input value="No categories available" disabled className="text-muted-foreground" />
-                              <FormDescription>
-                                <Link href="/Routes/categories/create" className="text-primary hover:underline">
-                                  Create categories first
-                                </Link>
-                              </FormDescription>
-                            </div>
-                          )}
+                          <Select
+                            onValueChange={(value) => field.onChange(value)}
+                            defaultValue={"groccery"}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="groccery">Groccery</SelectItem>
+                              <SelectItem value="shopping">Shopping</SelectItem>
+                              <SelectItem value="travel">Travel</SelectItem>
+                              <SelectItem value="bills">Bills</SelectItem>
+                              <SelectItem value="Income">Income</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -184,7 +165,7 @@ export default function AddTransactionPage() {
                   </div>
 
                   <CardFooter className="flex justify-end px-0 pt-4">
-                    <Button type="submit" disabled={safeCategories.length === 0}>
+                    <Button type="submit" >
                       Add Transaction
                     </Button>
                   </CardFooter>
