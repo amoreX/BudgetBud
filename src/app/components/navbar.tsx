@@ -13,13 +13,13 @@ const Navbar=():JSX.Element=>{
         <Link href="/">
             <Button variant="ghost">Dashboard</Button>
           </Link>
-          <Link href="/Routes/Transactions">
+          <Link href="/Routes/transactions">
             <Button variant="ghost">Transactions</Button>
           </Link>
-          <Link href="/Routes/Budget">
+          <Link href="/Routes/budget">
             <Button variant="ghost">Budgets</Button>
           </Link>
-          <Link href="/Routes/Transactions/new">
+          <Link href="/Routes/transactions/new">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               Add Transaction

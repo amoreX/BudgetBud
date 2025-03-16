@@ -106,7 +106,7 @@ export default function TransactionsPage() {
                       Add your first transaction to start tracking your finances.
                     </p>
                     <Button asChild>
-                      <a href="/Routes/Transactions/new">Add your first transaction</a>
+                      <a href="/Routes/transactions/new">Add your first transaction</a>
                     </Button>
                   </div>
                 </div>

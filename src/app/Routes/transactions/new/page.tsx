@@ -171,7 +171,7 @@ export default function AddTransactionPage() {
                             <div className="flex flex-col space-y-2">
                               <Input value="No categories available" disabled className="text-muted-foreground" />
                               <FormDescription>
-                                <Link href="/categories" className="text-primary hover:underline">
+                                <Link href="/Routes/categories/create" className="text-primary hover:underline">
                                   Create categories first
                                 </Link>
                               </FormDescription>
