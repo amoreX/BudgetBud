@@ -25,6 +25,7 @@ interface ExpenseContextProps{
 	getExpensesByCategory:(category:string)=>Expense[];
 	getIncome:()=>Expense[];
 	getExpense:()=>Expense[];
+	loading: boolean; // Added loading property
 }
 
 
@@ -108,7 +109,18 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 
 	return (
 		<ExpenseContext.Provider
-		value={{expenses,addExpense,updateExpense,deleteExpense,getExpenseById,getExpensesByCategory,getTotalExpenses,getIncome,getExpense, loading}}
+		value={{
+			expenses,
+			addExpense,
+			updateExpense,
+			deleteExpense,
+			getExpenseById,
+			getExpensesByCategory,
+			getTotalExpenses,
+			getIncome,
+			getExpense,
+			loading // Added loading to the context value
+		}}
 		>
 			{children}
 		</ExpenseContext.Provider>
