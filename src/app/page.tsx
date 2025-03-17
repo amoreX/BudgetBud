@@ -18,15 +18,19 @@ import { useExpensesContext } from "./context/DataContext"
 
 export default function Dashboard() {
   const [view, setView] = useState<string>("currentMonth") // Toggle state
-  
+  const { loading } = useExpensesContext(); // Get loading state from context
 
   return (
     <div className="flex max-h-screen flex-col px-4">    
       <main className="flex-1 flex justify-center">
         <div className="container py-6 ">
-          <Suspense fallback={<SummarySkeleton />}>
-            <SummaryCards />
-          </Suspense>
+          {loading ? (
+            <SummarySkeleton />
+          ) : (
+            <Suspense fallback={<SummarySkeleton />}>
+              <SummaryCards />
+            </Suspense>
+          )}
 
           <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card className="lg:col-span-2 overflow-hidden">

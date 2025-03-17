@@ -1,8 +1,8 @@
 "use client"
 
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { exec } from "child_process";
 import { execPath } from "process";
-import { createContext,useContext,useState,ReactNode,useEffect } from "react";
 import {v4 as uuidv4} from "uuid";
 import axios from 'axios';
 
@@ -32,6 +32,7 @@ const ExpenseContext = createContext<ExpenseContextProps | undefined> (undefined
 
 export const ExpenseProvider =({children}:{children:ReactNode})=>{
 	const [expenses,setExpenses]=useState<Expense[]>([]);
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchExpenses = async () => {
@@ -42,6 +43,8 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 				setExpenses(res.data.expenses.expenses);
 			} catch (error) {
 				console.error("Error fetching expenses:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 		fetchExpenses();
@@ -105,7 +108,7 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 
 	return (
 		<ExpenseContext.Provider
-		value={{expenses,addExpense,updateExpense,deleteExpense,getExpenseById,getExpensesByCategory,getTotalExpenses,getIncome,getExpense}}
+		value={{expenses,addExpense,updateExpense,deleteExpense,getExpenseById,getExpensesByCategory,getTotalExpenses,getIncome,getExpense, loading}}
 		>
 			{children}
 		</ExpenseContext.Provider>
