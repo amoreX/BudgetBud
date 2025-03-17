@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Plus, Wallet, Check } from "lucide-react" // Import Check icon
+import { Plus, Wallet, Check } from "lucide-react"
 import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,39 +12,36 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useBudgetContext } from "@/app/context/BudgetContext"
-import { useEffect } from "react"
+import { toast, Toaster } from "sonner" // Import toast and Toaster
 
-type catData={
-  name:string;
-  value:number;
+type catData = {
+  name: string;
+  value: number;
 }
 
 export default function BudgetsPage() {
-  const { budgets,updateBudget } = useBudgetContext();
-  const {expenses}=useExpensesContext();
+  const { budgets, updateBudget } = useBudgetContext();
+  const { expenses } = useExpensesContext();
 
   const today = new Date()
   const currentMonth = today.getMonth()
   const currentYear = today.getFullYear()
-   
-  const hasData=expenses.length >0
-  const categories:string[]=["grocery","shopping","bills","income","travel"];
+
+  const hasData = expenses.length > 0
+  const categories: string[] = ["grocery", "shopping", "bills", "income", "travel"];
 
   let categoryData: catData[] = [];
 
-
   if (hasData) {
-    // Filter transactions for the current month and year
     const thisMonthTransactions = expenses.filter((t) => {
       const date = new Date(t.date)
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear
     })
 
-    // Group by category
     categoryData = categories
       .map((category) => {
         const categoryTransactions = thisMonthTransactions.filter((t) => t.category == category)
-        console.log("each Category:",categoryTransactions);
+        console.log("each Category:", categoryTransactions);
         const total = categoryTransactions.reduce((sum, t) => sum + Number(t.amount), 0)
 
         return {
@@ -52,12 +49,18 @@ export default function BudgetsPage() {
           value: total,
         }
       });
-    
+
     console.log("Category Data:", categoryData)
   }
 
-  const handleBudgetChange=(name:string,value:Number)=>{
-    updateBudget(name,value);
+  const handleBudgetChange = (name: string, value: Number) => {
+    updateBudget(name, value);
+    toast("Your budget has been updated.", {
+      style: {
+        backgroundColor: 'black',
+        color: 'white'
+      }
+    });
   };
 
   const [tempBudgets, setTempBudgets] = useState(budgets.reduce((acc, category) => {
@@ -73,11 +76,13 @@ export default function BudgetsPage() {
     handleBudgetChange(category, tempBudgets[category]);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(budgets);
-  },[budgets])
+  }, [budgets])
+
   return (
     <div className="flex max-h-screen flex-col p-4">
+      
       <main className="flex justify-center">
         <div className="container py-6">
           <Card>
@@ -87,10 +92,10 @@ export default function BudgetsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {budgets.map((category) => {
+                {budgets.filter(category => category.category !== "income").map((category) => {
                   const budget = category.amount;
                   const spent = categoryData.find((data) => data.name === category.category)?.value || 0;
-                  
+
                   return (
                     <div key={category.category} className="flex items-center justify-between gap-4">
                       <div className="space-y-1">
