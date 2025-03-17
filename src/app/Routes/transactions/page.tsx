@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { ArrowUpDown, ChevronDown, Plus, Receipt } from "lucide-react"
 import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
@@ -16,7 +15,6 @@ import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 import { TransactionDialog } from "@/app/components/transaction-dialog"
-import { transactions } from "@/lib/data"
 
 export default function TransactionsPage() {
   const [sorting, setSorting] = useState<"date" | "amount">("date");
@@ -68,15 +66,15 @@ export default function TransactionsPage() {
   return (
     <div className="flex max-h-screen flex-col px-4">
       <main className="flex justify-center">
-        <div className="container py-6">
+        <div className="container py-4">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
+              <div className=" flex-col sm:flex sm:flex-row items-center justify-between ">
+                <div >
                   <CardTitle>Transactions</CardTitle>
                   <CardDescription className="sm:block">Manage your financial transactions</CardDescription>
                 </div>
-                <div className="flex flex-col items-end sm:flex-row  gap-2">
+                <div className="flex flex-row items-end sm:flex-row  gap-2 py-4  sm:my-0">
                   <Input
                     placeholder="Search transactions..."
                     className="w-[200px]"

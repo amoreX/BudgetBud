@@ -50,6 +50,7 @@ export default function CategoryPieChart() {
         expenses: totalExpenses,
       }
     }).filter((category) => category.expenses > 0 || Number(category.budget) > 0)
+      .filter((category) => category.name !== "income" && Number(category.budget) > 0) // Exclude "income" and budget 0
   }
 
   // If no data or no expenses this month, show empty state

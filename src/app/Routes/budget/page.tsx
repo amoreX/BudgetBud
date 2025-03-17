@@ -1,18 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import { Plus, Wallet, Check } from "lucide-react"
 import { useExpensesContext } from "@/app/context/DataContext"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useBudgetContext } from "@/app/context/BudgetContext"
-import { toast, Toaster } from "sonner" // Import toast and Toaster
+import { toast } from "sonner" // Import toast and Toaster
 
 type catData = {
   name: string;
@@ -48,7 +43,8 @@ export default function BudgetsPage() {
           name: category,
           value: total,
         }
-      });
+      })
+      .filter((data) => data.name !== "income"); // Filter out the "income" category
 
     console.log("Category Data:", categoryData)
   }

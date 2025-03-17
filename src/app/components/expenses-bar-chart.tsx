@@ -6,7 +6,7 @@ import { useState } from "react"
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Button } from "@/components/ui/button"
-import { transactions } from "@/lib/data"
+
 import { useExpensesContext } from "../context/DataContext"
 
 type monthdat={
@@ -35,7 +35,7 @@ export default function ExpensesBarChart({ view }: ExpensesBarChartProps) {
 
         const monthTransactions = expenses.filter((t) => {
           const date = new Date(t.date)
-          return date.getMonth() === month.getMonth() && date.getFullYear() === month.getFullYear()
+          return date.getMonth() === month.getMonth() && date.getFullYear() === month.getFullYear() && t.isExpense
         })
 
         const e = monthTransactions.reduce((sum, t) => sum + Math.abs(t.amount), 0);
@@ -53,7 +53,7 @@ export default function ExpensesBarChart({ view }: ExpensesBarChartProps) {
 
         const dayTransactions = expenses.filter((t) => {
           const date = new Date(t.date)
-          return date.getDate() === day.getDate() && date.getMonth() === day.getMonth() && date.getFullYear() === day.getFullYear()
+          return date.getDate() === day.getDate() && date.getMonth() === day.getMonth() && date.getFullYear() === day.getFullYear() && t.isExpense
         })
 
         const e = dayTransactions.reduce((sum, t) => sum + Math.abs(t.amount), 0);

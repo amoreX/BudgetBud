@@ -1,9 +1,9 @@
 "use client"
 
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Plus } from "lucide-react"
-
+import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -14,11 +14,10 @@ import RecentTransactions from "@/app/components/recent-transactions"
 import SummaryCards from "@/app/components/summary-cards"
 import SummarySkeleton from "@/app/components/summary-skeleton"
 import TransactionsSkeleton from "./components/transactions-skeleton"
-
 import { useExpensesContext } from "./context/DataContext"
 
 export default function Dashboard() {
-  const [view, setView] = useState<string>("6months") // Toggle state
+  const [view, setView] = useState<string>("currentMonth") // Toggle state
   
 
   return (

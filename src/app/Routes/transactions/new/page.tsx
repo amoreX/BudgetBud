@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { useEffect, useState } from "react"
@@ -12,9 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
-import { categories, transactions } from "@/lib/data"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner" // Import toast
+import { toast } from "sonner"
 
 export default function AddTransactionPage() {
   

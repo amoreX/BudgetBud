@@ -2,8 +2,10 @@
 
 import { exec } from "child_process";
 import { execPath } from "process";
-import { createContext,useContext,useState,ReactNode } from "react";
+import { createContext,useContext,useState,ReactNode,useEffect } from "react";
 import {v4 as uuidv4} from "uuid";
+import axios from 'axios';
+
 interface Expense{
 	id:string;
 	isExpense:boolean;
@@ -31,22 +33,54 @@ const ExpenseContext = createContext<ExpenseContextProps | undefined> (undefined
 export const ExpenseProvider =({children}:{children:ReactNode})=>{
 	const [expenses,setExpenses]=useState<Expense[]>([]);
 
-	const addExpense=(expense:Omit<Expense,'id'>)=>{
-		const newExpense = { ...expense, id: uuidv4() };
-		setExpenses((prevExpense)=>[...prevExpense,newExpense]);
+	useEffect(() => {
+		const fetchExpenses = async () => {
+			try {
+				const res = await axios.get("/api/fetchTransaction");
+	
+				// Directly set the expenses state
+				setExpenses(res.data.expenses.expenses);
+			} catch (error) {
+				console.error("Error fetching expenses:", error);
+			}
+		};
+		fetchExpenses();
+	}, []);
+
+	const addExpense=async (expense:Omit<Expense,'id'>)=>{
+		try {
+			if(expense.amount!=0){
+
+				const newExpense = { ...expense, id: uuidv4() };
+				const response = await axios.post('/api/addTransaction', {id:newExpense.id,isExpense:newExpense.isExpense,amount:newExpense.amount,description:newExpense.description,date:newExpense.date,category:newExpense.category});
+				setExpenses((prevExpense)=>[...prevExpense, newExpense]);
+			}
+		} catch (error) {
+			console.error("Error adding expense:", error);
+		}
 	};
 
 	const updateExpense=(id:string,updatedExpense:Partial<Expense>)=>{
-		setExpenses((prevExpenses)=>
-		prevExpenses.map((expense)=>
-			expense.id===id?{...expense,...updatedExpense}:expense
-		));
+		
+				setExpenses((prevExpenses)=>
+				prevExpenses.map((expense)=>
+					expense.id===id?{...expense,...updatedExpense}:expense
+				));
+		
 	};
 
-	const deleteExpense=(id:string)=>{
-		setExpenses((prevExpense)=>
-			prevExpense.filter((expense)=>expense.id!==id)
-		);
+	const deleteExpense=async(id:string)=>{
+		try {
+			if(id){
+
+				const response = await axios.post('/api/deleteTransaction', {id:id});
+				setExpenses((prevExpense)=>
+					prevExpense.filter((expense)=>expense.id!==id)
+				);
+			}
+		} catch (error) {
+			console.error("Error adding expense:", error);
+		}
 	};
 
 	const getTotalExpenses =()=>{

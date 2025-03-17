@@ -20,14 +20,27 @@ export default function SummaryCards() {
   },[budgets]) // Track changes to activeBudgets
 
   useEffect(()=>{
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+
     let inc=getIncome();
     let ex=getExpense();
     if(inc){
-      let total=inc.reduce((tot,each)=>tot+Number(each.amount),0); // Convert amount to number
+      let total=inc
+        .filter(each => {
+          const date = new Date(each.date);
+          return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+        })
+        .reduce((tot,each)=>tot+Number(each.amount),0); // Convert amount to number
       setIncome(total);       
     }
     if(ex){
-      let total=ex.reduce((tot,each)=>tot+Number(each.amount),0); // Convert amount to number
+      let total=ex
+        .filter(each => {
+          const date = new Date(each.date);
+          return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
+        })
+        .reduce((tot,each)=>tot+Number(each.amount),0); // Convert amount to number
       setExpense(total);       
     }
   },[expenses]);
