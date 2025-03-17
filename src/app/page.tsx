@@ -7,7 +7,6 @@ import { ArrowRight, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-
 import BudgetVsActualChart from "@/app/components/budget-vs-actual-chart"
 import CategoryPieChart from "@/app/components/category-pie-chart"
 import ExpensesBarChart from "@/app/components/expenses-bar-chart"
@@ -20,6 +19,7 @@ import { useExpensesContext } from "./context/DataContext"
 
 export default function Dashboard() {
   const [view, setView] = useState<string>("6months") // Toggle state
+  
 
   return (
     <div className="flex max-h-screen flex-col px-4">    
@@ -60,7 +60,7 @@ export default function Dashboard() {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <Card>
+            <Card className="overflow-hidden">
               <CardHeader>
                 <CardTitle>Budget vs. Actual</CardTitle>
                 <CardDescription>How you're tracking against your budget</CardDescription>

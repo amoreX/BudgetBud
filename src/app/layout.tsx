@@ -6,7 +6,7 @@ import "./globals.css";
 import Navbar from "./components/navbar";
 import { Toaster } from "@/components/ui/sonner"
 
-
+import { BudgetProvider } from "./context/BudgetContext";
 import { ExpenseProvider } from "./context/DataContext";
 
 const geistSans = Geist({
@@ -35,9 +35,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ExpenseProvider>
+          <BudgetProvider>
         <Navbar/>
         {children}
         <Toaster/>
+        </BudgetProvider>
         </ExpenseProvider>
       </body>
     </html>

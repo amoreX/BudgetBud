@@ -4,14 +4,21 @@ import { ArrowDown, ArrowUp, CreditCard, DollarSign } from "lucide-react"
 import {useState,useEffect} from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { transactions } from "@/lib/data"
-import { budgets } from "@/lib/data" // Import budgets
 import { useExpensesContext } from "../context/DataContext"
+import { useBudgetContext } from "../context/BudgetContext";
 
 
 export default function SummaryCards() {
   const{expenses,getExpense,getIncome}=useExpensesContext();
+  const [numActive,setNumActive]=useState<number>(0);
+  const {budgets}=useBudgetContext();
   const[totalIncome,setIncome]=useState<number>(0);
   const[totalExpense,setExpense]=useState<number>(0);
+
+  useEffect(()=>{
+    setNumActive(budgets.filter((t)=>t.amount!=0).length);
+  },[budgets]) // Track changes to activeBudgets
+
   useEffect(()=>{
     let inc=getIncome();
     let ex=getExpense();
@@ -71,12 +78,12 @@ export default function SummaryCards() {
       <Card>
         <CardHeader className="pb-2">
           <CardDescription>Active Budgets</CardDescription>
-          <CardTitle className="text-2xl font-bold">{(budgets || []).length}</CardTitle>
+          <CardTitle className="text-2xl font-bold">{numActive}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center text-sm text-muted-foreground">
             <CreditCard className="mr-1 h-4 w-4" />
-            {/* <span>{safeTransactions.length > 0 ? "Track your spending" : "Set up a budget"}</span> */}
+            <span>Active Budgets</span>
           </div>
         </CardContent>
       </Card>
