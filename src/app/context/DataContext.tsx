@@ -1,10 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { exec } from "child_process";
-import { execPath } from "process";
 import {v4 as uuidv4} from "uuid";
-import axios from 'axios';
 
 interface Expense{
 	id:string;
@@ -36,14 +33,15 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const fetchExpenses = async () => {
+		const fetchExpenses = () => {
 			try {
-				const res = await axios.get("/api/fetchTransaction");
-	
-				// Directly set the expenses state
-				setExpenses(res.data.expenses.expenses);
+				// Fetch expenses from local storage
+				const storedExpenses = localStorage.getItem("expenses");
+				if (storedExpenses) {
+					setExpenses(JSON.parse(storedExpenses));
+				}
 			} catch (error) {
-				console.error("Error fetching expenses:", error);
+				console.error("Error fetching expenses from local storage:", error);
 			} finally {
 				setLoading(false);
 			}
@@ -51,13 +49,16 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 		fetchExpenses();
 	}, []);
 
-	const addExpense=async (expense:Omit<Expense,'id'>)=>{
+	const addExpense=(expense:Omit<Expense,'id'>)=>{
 		try {
-			if(expense.amount!=0){
-
+			if(expense.amount !== 0){
 				const newExpense = { ...expense, id: uuidv4() };
-				const response = await axios.post('/api/addTransaction', {id:newExpense.id,isExpense:newExpense.isExpense,amount:newExpense.amount,description:newExpense.description,date:newExpense.date,category:newExpense.category});
-				setExpenses((prevExpense)=>[...prevExpense, newExpense]);
+				setExpenses((prevExpenses) => {
+					const updatedExpenses = [...prevExpenses, newExpense];
+					// Update local storage
+					localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+					return updatedExpenses;
+				});
 			}
 		} catch (error) {
 			console.error("Error adding expense:", error);
@@ -65,25 +66,28 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 	};
 
 	const updateExpense=(id:string,updatedExpense:Partial<Expense>)=>{
-		
-				setExpenses((prevExpenses)=>
-				prevExpenses.map((expense)=>
-					expense.id===id?{...expense,...updatedExpense}:expense
-				));
-		
+		setExpenses((prevExpenses) => {
+			const updatedExpenses = prevExpenses.map((expense) =>
+				expense.id === id ? { ...expense, ...updatedExpense } : expense
+			);
+			// Update local storage
+			localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+			return updatedExpenses;
+		});
 	};
 
-	const deleteExpense=async(id:string)=>{
+	const deleteExpense=(id:string)=>{
 		try {
 			if(id){
-
-				const response = await axios.post('/api/deleteTransaction', {id:id});
-				setExpenses((prevExpense)=>
-					prevExpense.filter((expense)=>expense.id!==id)
-				);
+				setExpenses((prevExpenses) => {
+					const updatedExpenses = prevExpenses.filter((expense) => expense.id !== id);
+					// Update local storage
+					localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+					return updatedExpenses;
+				});
 			}
 		} catch (error) {
-			console.error("Error adding expense:", error);
+			console.error("Error deleting expense:", error);
 		}
 	};
 
@@ -93,7 +97,8 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 
 	const getExpenseById=(id:string)=>{
 		return expenses.filter((expense)=>expense.id===id);
-	}
+	};
+
 	const getExpensesByCategory = (category: string) => {
 		return expenses.filter((expense) => expense.category === category);
 	};
@@ -104,7 +109,6 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 
 	const getExpense=()=>{
 		return expenses.filter((expense)=>expense.isExpense==true);
-		
 	};
 
 	return (
@@ -124,8 +128,7 @@ export const ExpenseProvider =({children}:{children:ReactNode})=>{
 		>
 			{children}
 		</ExpenseContext.Provider>
-	)
-
+	);
 };
 
 export const useExpensesContext = () => {
