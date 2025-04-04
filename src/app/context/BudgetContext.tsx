@@ -21,9 +21,12 @@ const BudgetContext = createContext<BudgetContextProps | undefined>(undefined);
 export const BudgetProvider = ({ children }: { children: ReactNode }) => {
 	const [budgets, setBudgets] = useState<Budget[]>(
 		() => {
-			// Fetch budgets from local storage or initialize with default categories
-			const storedBudgets = localStorage.getItem("budgets");
-			return storedBudgets ? JSON.parse(storedBudgets) : categories.map(category => ({ category, amount: 0 }));
+			 // Ensure localStorage is defined before accessing it
+			if (typeof window !== "undefined") {
+				const storedBudgets = localStorage.getItem("budgets");
+				return storedBudgets ? JSON.parse(storedBudgets) : categories.map(category => ({ category, amount: 0 }));
+			}
+			return categories.map(category => ({ category, amount: 0 }));
 		}
 	);
 
@@ -41,7 +44,10 @@ export const BudgetProvider = ({ children }: { children: ReactNode }) => {
 
 	// Save budgets to local storage whenever they change
 	useEffect(() => {
-		localStorage.setItem("budgets", JSON.stringify(budgets));
+		// Ensure localStorage is defined before setting it
+		if (typeof window !== "undefined") {
+			localStorage.setItem("budgets", JSON.stringify(budgets));
+		}
 	}, [budgets]);
 
 	return (
